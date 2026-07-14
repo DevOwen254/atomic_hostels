@@ -305,7 +305,7 @@ def resident_dashboard():
     """, (resident_id,))
     payments = cursor.fetchall()
 
-    return render_template('resident_dashboard.html', info=info, payments=payments)
+    return render_template('residents_dashboard.html', info=info, payments=payments)
 
 
 
