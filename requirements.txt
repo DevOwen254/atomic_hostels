@@ -1,5 +1,4 @@
 Flask
-mysql-python
-connector
+mysql-connector-python
 werkzeug
 gunicorn
