@@ -20,6 +20,15 @@ cursor = db.cursor()
 
 # AUTH DECORATORS
 
+cursor.execute("SELECT * FROM admin WHERE username='admin'")
+if not cursor.fetchone():
+    hashed = generate_password_hash("Admin@123")
+    cursor.execute(
+        "INSERT INTO admin (username, password) VALUES (%s, %s)",
+        ("Admin", hashed)
+    )
+    db.commit()
+
 def admin_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
