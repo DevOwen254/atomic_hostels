@@ -284,7 +284,7 @@ def reset_password():
 
 #  RESIDENT DASHBOARD 
 
-@app.route('/resident_dashboard')
+@app.route('/residents_dashboard')
 @resident_required
 def resident_dashboard():
     resident_id = session['resident']
