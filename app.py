@@ -46,18 +46,31 @@ def home():
 
 @app.route('/login', methods=['POST'])
 def login():
-    username = request.form['username']
+    role = request.form['role']
+    identifier = request.form['identifier']
     password = request.form['password']
 
+    # ADMIN LOGIN
+    if role == 'admin':
+        cursor.execute("SELECT * FROM admin WHERE username=%s", (identifier,))
+        user = cursor.fetchone()
 
-    cursor.execute("SELECT * FROM admin WHERE username=%s", (username,))
-    user = cursor.fetchone()
+        if user and check_password_hash(user[2], password):
+            session.clear()
+            session['admin'] = user[0]
+            return redirect('/dashboard')
 
-    if user and check_password_hash(user[2], password):
-        session['admin'] = user[0]
-        return redirect('/dashboard')
-    else:
-        return "Invalid login"
+    # RESIDENT LOGIN
+    elif role == 'resident':
+        cursor.execute("SELECT * FROM residents WHERE email=%s", (identifier,))
+        user = cursor.fetchone()
+
+        if user and check_password_hash(user[4], password):
+            session.clear()
+            session['resident'] = user[0]
+            return redirect('/resident_dashboard')
+
+    return "Invalid login"
 
 
 @app.route('/logout')
