@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 from functools import wraps
-import mysql
-import connector
+import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
