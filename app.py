@@ -179,8 +179,8 @@ def add_room():
 
 
     cursor.execute(
-        "INSERT INTO rooms (room_number, capacity) VALUES (%s, %s)",
-        (room_number, capacity)
+        "INSERT INTO rooms (room_number, capacity) VALUES (%s, %s,%s)",
+        (room_number, capacity,0)
     )
 
     db.commit()
