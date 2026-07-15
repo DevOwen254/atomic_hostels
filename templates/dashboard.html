@@ -1,35 +1,61 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
 {% block content %}
-
-<h2>Dashboard</h2>
 
 <div class="row">
 
-    <div class="col-md-3">
-        <div class="card text-white bg-primary mb-3">
-            <div class="card-body">
-                <h5>Total Residents</h5>
-                <p>{{ total_residents }}</p>
-            </div>
+    <!-- Total Residents -->
+    <div class="col-12 col-md-4 mb-3">
+        <div class="card p-4 text-center">
+            <i class="bi bi-people fs-1 text-primary"></i>
+            <h6>Total Residents</h6>
+            <h3>{{ total_residents }}</h3>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card text-white bg-success mb-3">
-            <div class="card-body">
-                <h5>Available Rooms</h5>
-                <p>{{ available_rooms }}</p>
-            </div>
+    <!-- Available Rooms -->
+    <div class="col-12 col-md-4 mb-3">
+        <div class="card p-4 text-center">
+            <i class="bi bi-door-open fs-1 text-success"></i>
+            <h6>Available Rooms</h6>
+            <h3>{{ available_rooms }}</h3>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card text-white bg-warning mb-3">
-            <div class="card-body">
-                <h5>Total Payments</h5>
-                <p>{{ total_payments }}</p>
-            </div>
+    <!-- Payments -->
+    <div class="col-12 col-md-4 mb-3">
+        <div class="card p-4 text-center">
+            <i class="bi bi-currency-dollar fs-1 text-warning"></i>
+            <h6>Total Payments</h6>
+            <h3>Ksh {{ total_payments }}</h3>
+        </div>
+    </div>
+
+</div>
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+
+    <div class="col-12 col-md-4 mb-3">
+        <div class="card p-3 text-center">
+            <a href="/residents" class="btn btn-outline-primary w-100">
+                Manage Residents
+            </a>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4 mb-3">
+        <div class="card p-3 text-center">
+            <a href="/rooms" class="btn btn-outline-success w-100">
+                Manage Rooms
+            </a>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4 mb-3">
+        <div class="card p-3 text-center">
+            <a href="/payments" class="btn btn-outline-warning w-100">
+                Manage Payments
+            </a>
         </div>
     </div>
 
