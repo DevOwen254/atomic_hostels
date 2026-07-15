@@ -316,30 +316,30 @@ def complaints():
     resident_id = session['resident']
 
     if request.method == 'POST':
+        subject = request.form.get('subject')
+        complaint = request.form.get('complaint')
 
-        subject = request.form['subject']
-        complaint = request.form['complaint']
+        if not subject or not complaint:
+            return "All fields are required"
 
         cursor.execute("""
-        INSERT INTO complaints(resident_id,subject,complaint)
-        VALUES(%s,%s,%s)
-        """,(resident_id,subject,complaint))
+        INSERT INTO complaints(resident_id, subject, complaint)
+        VALUES(%s, %s, %s)
+        """, (resident_id, subject, complaint))
 
         db.commit()
-
         return redirect('/complaints')
 
     cursor.execute("""
-    SELECT subject,status,date_created
+    SELECT subject, status, date_created
     FROM complaints
     WHERE resident_id=%s
     ORDER BY date_created DESC
-    """,(resident_id,))
+    """, (resident_id,))
 
-    complaints = cursor.fetchall()
+    data = cursor.fetchall()
 
-    return render_template("complaints.html",
-                           complaints=complaints)
+    return render_template("complaints.html", complaints=data)
 
 
 
