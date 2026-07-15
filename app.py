@@ -264,25 +264,46 @@ def resident_logout():
 def reset_password():
     if request.method == 'POST':
         email = request.form['email']
-        new_password = generate_password_hash(request.form['new_password'])
 
-    
-        cursor.execute("SELECT * FROM residents WHERE email=%s", (email,))
+        cursor.execute("SELECT id FROM residents WHERE email=%s", (email,))
         user = cursor.fetchone()
 
-        if user:
-            cursor.execute(
-                "UPDATE residents SET password=%s WHERE email=%s",
-                (new_password, email)
-            )
-            db.commit()
-            return "Password updated successfully"
-        else:
+        if not user:
             return "Email not found"
+
+        # generate code
+        code = str(random.randint(100000, 999999))
+
+        session['reset_code'] = code
+        session['reset_email'] = email
+
+        #  TEMPORARY "FAKE EMAIL"
+        return render_template('verify_code.html', message=f"Your reset code is {code}")
 
     return render_template('reset_password.html')
 
+# verification
+@app.route('/verify_code', methods=['POST'])
+def verify_code():
+    code = request.form['code']
+    new_password = request.form['new_password']
 
+    if code != session.get('reset_code'):
+        return "Invalid code"
+
+    email = session.get('reset_email')
+    hashed = generate_password_hash(new_password)
+
+    cursor.execute(
+        "UPDATE residents SET password=%s WHERE email=%s",
+        (hashed, email)
+    )
+    db.commit()
+
+    session.pop('reset_code', None)
+    session.pop('reset_email', None)
+
+    return redirect('/resident_login')
 #  RESIDENT DASHBOARD 
 
 @app.route('/residents_dashboard')
