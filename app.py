@@ -234,7 +234,7 @@ def add_payment():
 
 @app.route('/resident_login')
 def resident_login_page():
-    return render_template('resident_login.html')
+    return render_template('login.html')
 
 @app.route('/resident_login', methods=['POST'])
 def resident_login():
