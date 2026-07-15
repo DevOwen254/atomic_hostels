@@ -3,6 +3,7 @@ from functools import wraps
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+import random
 
 app = Flask(__name__)
 app.secret_key = 'secret123'
