@@ -364,6 +364,50 @@ def complaints():
 
     return render_template("complaints.html", complaints=data)
 
+# Reports
+@app.route('/reports')
+@admin_required
+def reports():
+
+    # Total residents
+    cursor.execute("SELECT COUNT(*) FROM residents")
+    total_residents = cursor.fetchone()[0]
+
+    # Total rooms
+    cursor.execute("SELECT COUNT(*) FROM rooms")
+    total_rooms = cursor.fetchone()[0]
+
+    # Occupied rooms
+    cursor.execute("SELECT SUM(occupied) FROM rooms")
+    occupied_rooms = cursor.fetchone()[0] or 0
+
+    # Available spaces
+    cursor.execute("SELECT SUM(capacity - occupied) FROM rooms")
+    available_spaces = cursor.fetchone()[0] or 0
+
+    # Total payments
+    cursor.execute("SELECT SUM(amount_paid) FROM payments")
+    total_payments = cursor.fetchone()[0] or 0
+
+    # Residents with balance (owe money)
+    cursor.execute("""
+        SELECT residents.name, balance
+        FROM payments
+        JOIN residents ON payments.resident_id = residents.id
+        WHERE balance > 0
+    """)
+    debtors = cursor.fetchall()
+
+    return render_template(
+        'reports.html',
+        total_residents=total_residents,
+        total_rooms=total_rooms,
+        occupied_rooms=occupied_rooms,
+        available_spaces=available_spaces,
+        total_payments=total_payments,
+        debtors=debtors
+    )
+
 
 
 if __name__ == '__main__':
