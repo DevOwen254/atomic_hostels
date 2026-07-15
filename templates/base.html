@@ -15,6 +15,11 @@ body {
     overflow-x: hidden;
 }
 
+.sidebar a.active {
+    background: #0d6efd;
+    color: white;
+    border-radius: 5px;
+}
 /* SIDEBAR */
 .sidebar {
     width: 250px;
@@ -81,19 +86,74 @@ body {
     }
 }
 </style>
+<script>
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+}
+</script>
 </head>
 
 <body>
-
+<button class="btn btn-primary d-md-none m-2" onclick="toggleSidebar()">
+    ☰ Menu
+</button>
 <!-- SIDEBAR -->
 <div class="sidebar">
+
     <h4 class="text-center">🏠 Atomic</h4>
 
-    <a href="/resident_dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
-    <a href="/complaints"><i class="bi bi-chat-dots"></i> Complaints</a>
-    <a href="/reports"><i class="bi bi-flag"></i> Reports</a>
-    <a href="/change_password"><i class="bi bi-lock"></i> Password</a>
-    <a href="/logout" class="text-warning"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    <!-- RESIDENT MENU -->
+    {% if session.get('resident') %}
+        <a href="/resident_dashboard"
+           class="{% if title == 'Dashboard' %}active{% endif %}">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+
+        <a href="/complaints"
+           class="{% if title == 'Complaints' %}active{% endif %}">
+            <i class="bi bi-chat-dots"></i> Complaints
+        </a>
+
+        <a href="/change_password"
+           class="{% if title == 'Change Password' %}active{% endif %}">
+            <i class="bi bi-lock"></i> Password
+        </a>
+    {% endif %}
+
+    <!-- ADMIN MENU -->
+    {% if session.get('admin') %}
+        <a href="/dashboard"
+           class="{% if title == 'Admin Dashboard' %}active{% endif %}">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+
+        <a href="/residents"
+           class="{% if title == 'Manage Residents' %}active{% endif %}">
+            <i class="bi bi-people"></i> Residents
+        </a>
+
+        <a href="/rooms"
+           class="{% if title == 'Rooms' %}active{% endif %}">
+            <i class="bi bi-door-open"></i> Rooms
+        </a>
+
+        <a href="/payments"
+           class="{% if title == 'Payments' %}active{% endif %}">
+            <i class="bi bi-cash"></i> Payments
+        </a>
+
+        <a href="/reports"
+           class="{% if title == 'Reports & Analytics' %}active{% endif %}">
+            <i class="bi bi-bar-chart"></i> Reports
+        </a>
+    {% endif %}
+
+    <!-- LOGOUT -->
+    <a href="/logout" class="text-warning">
+        <i class="bi bi-box-arrow-right"></i> Logout
+    </a>
+
 </div>
 
 <!-- MAIN -->
