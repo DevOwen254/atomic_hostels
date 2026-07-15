@@ -307,6 +307,40 @@ def resident_dashboard():
 
     return render_template('residents_dashboard.html', info=info, payments=payments)
 
+# complaints
+
+@app.route('/complaints', methods=['GET', 'POST'])
+@resident_required
+def complaints():
+
+    resident_id = session['resident']
+
+    if request.method == 'POST':
+
+        subject = request.form['subject']
+        complaint = request.form['complaint']
+
+        cursor.execute("""
+        INSERT INTO complaints(resident_id,subject,complaint)
+        VALUES(%s,%s,%s)
+        """,(resident_id,subject,complaint))
+
+        db.commit()
+
+        return redirect('/complaints')
+
+    cursor.execute("""
+    SELECT subject,status,date_created
+    FROM complaints
+    WHERE resident_id=%s
+    ORDER BY date_created DESC
+    """,(resident_id,))
+
+    complaints = cursor.fetchall()
+
+    return render_template("complaints.html",
+                           complaints=complaints)
+
 
 
 if __name__ == '__main__':
