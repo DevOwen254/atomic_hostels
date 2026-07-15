@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 from functools import wraps
+from flask import flash
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
@@ -448,7 +449,9 @@ def change_password():
         )
         db.commit()
 
-        return "Password updated successfully"
+        flash("Password updated successfully. Please log in again.")
+        session.clear()
+        return redirect('/')
 
     return render_template('change_admin_password.html')
 
