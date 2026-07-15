@@ -409,7 +409,7 @@ def reports():
     )
 
 # change admin password
-@app.route('/change_password', methods=['GET', 'POST'])
+@app.route('/change_admin_password', methods=['GET', 'POST'])
 def change_password():
 
     if 'admin' in session:
