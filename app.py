@@ -450,7 +450,7 @@ def change_password():
 
         return "Password updated successfully"
 
-    return render_template('change_password.html')
+    return render_template('change_admin_password.html')
 
 
 
