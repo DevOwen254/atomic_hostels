@@ -411,41 +411,35 @@ def reports():
 
 # change admin password
 @app.route('/change_admin_password', methods=['GET', 'POST'])
-def change_password():
-
-    if 'admin' in session:
-        user_id = session['admin']
-        table = 'admin'
-    elif 'resident' in session:
-        user_id = session['resident']
-        table = 'residents'
-    else:
-        return redirect('/')
-
+@admin_required
+def change_admin_password():
     if request.method == 'POST':
         current_password = request.form.get('current_password')
         new_password = request.form.get('new_password')
-
         confirm_password = request.form.get('confirm_password')
+
+        if not all([current_password, new_password, confirm_password]):
+            return "All fields are required"
 
         if new_password != confirm_password:
             return "Passwords do not match"
 
-        # continue with rest of logic...
-        cursor.execute(f"SELECT password FROM {table} WHERE id=%s", (user_id,))
-        user = cursor.fetchone()
+        admin_id = session['admin']
 
-        if not user:
-            return "User not found"
+        cursor.execute("SELECT password FROM admin WHERE id=%s", (admin_id,))
+        admin = cursor.fetchone()
 
-        if not check_password_hash(user[0], current_password):
+        if not admin:
+            return "Admin not found"
+
+        if not check_password_hash(admin[0], current_password):
             return "Current password is incorrect"
 
         new_hashed = generate_password_hash(new_password)
 
         cursor.execute(
-            f"UPDATE {table} SET password=%s WHERE id=%s",
-            (new_hashed, user_id)
+            "UPDATE admin SET password=%s WHERE id=%s",
+            (new_hashed, admin_id)
         )
         db.commit()
 
@@ -454,6 +448,7 @@ def change_password():
         return redirect('/')
 
     return render_template('change_admin_password.html')
+
 
 
 
