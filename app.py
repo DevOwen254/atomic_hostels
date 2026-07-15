@@ -408,6 +408,50 @@ def reports():
         debtors=debtors
     )
 
+# change admin password
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+
+    if 'admin' in session:
+        user_id = session['admin']
+        table = 'admin'
+    elif 'resident' in session:
+        user_id = session['resident']
+        table = 'residents'
+    else:
+        return redirect('/')
+
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+
+        confirm_password = request.form.get('confirm_password')
+
+        if new_password != confirm_password:
+            return "Passwords do not match"
+
+        # continue with rest of logic...
+        cursor.execute(f"SELECT password FROM {table} WHERE id=%s", (user_id,))
+        user = cursor.fetchone()
+
+        if not user:
+            return "User not found"
+
+        if not check_password_hash(user[0], current_password):
+            return "Current password is incorrect"
+
+        new_hashed = generate_password_hash(new_password)
+
+        cursor.execute(
+            f"UPDATE {table} SET password=%s WHERE id=%s",
+            (new_hashed, user_id)
+        )
+        db.commit()
+
+        return "Password updated successfully"
+
+    return render_template('change_password.html')
+
 
 
 if __name__ == '__main__':
