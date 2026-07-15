@@ -67,7 +67,7 @@ def login():
         if user and check_password_hash(user[4], password):
             session.clear()
             session['resident'] = user[0]
-            return redirect('/resident_dashboard')
+            return redirect('/residents_dashboard')
 
     return "Invalid login"
 
@@ -229,7 +229,7 @@ def add_payment():
 
 # RESIDENT DASHBOARD 
 
-@app.route('/resident_dashboard')
+@app.route('/residents_dashboard')
 @resident_required
 def resident_dashboard():
     resident_id = session['resident']
@@ -371,6 +371,48 @@ def verify_code():
 
     session.clear()
     return redirect('/resident_login')
+
+
+# change admin password
+
+@app.route('/change_admin_password', methods=['GET', 'POST'])
+@admin_required
+def change_admin_password():
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        if not all([current_password, new_password, confirm_password]):
+            return "All fields are required"
+
+        if new_password != confirm_password:
+            return "Passwords do not match"
+
+        admin_id = session['admin']
+
+        cursor.execute("SELECT password FROM admin WHERE id=%s", (admin_id,))
+        admin = cursor.fetchone()
+
+        if not admin:
+            return "Admin not found"
+
+        if not check_password_hash(admin[0], current_password):
+            return "Current password is incorrect"
+
+        new_hashed = generate_password_hash(new_password)
+
+        cursor.execute(
+            "UPDATE admin SET password=%s WHERE id=%s",
+            (new_hashed, admin_id)
+        )
+        db.commit()
+
+        flash("Password updated successfully. Please log in again.")
+        session.clear()
+        return redirect('/')
+
+    return render_template('change_admin_password.html')
 
 
 if __name__ == '__main__':
