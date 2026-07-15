@@ -68,7 +68,7 @@ def login():
         if user and check_password_hash(user[4], password):
             session.clear()
             session['resident'] = user[0]
-            return redirect('/resident_dashboard')
+            return redirect('/residents_dashboard')
 
     return "Invalid login"
 
