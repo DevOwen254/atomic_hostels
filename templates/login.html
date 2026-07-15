@@ -30,6 +30,14 @@
     <h3 class="text-center">🏠 Atomic Hostels</h3>
     <p class="text-center text-muted">Login to your account</p>
 
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="background: #d4edda; padding: 10px; margin-bottom: 10px;">
+            {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <form method="POST" action="/login">
 
         <!-- ROLE SELECTION -->
