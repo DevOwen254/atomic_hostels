@@ -1,95 +1,85 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Reports</title>
-    <style>
-        body {
-            font-family: Arial;
-            background: #f4f6f9;
-            padding: 20px;
-        }
+{% extends "base.html" %}
 
-        .card {
-            background: white;
-            padding: 20px;
-            margin: 10px;
-            display: inline-block;
-            width: 200px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
+{% block content %}
 
-        h2 {
-            margin: 0;
-            color: #333;
-        }
+<div class="container-fluid">
 
-        .debtors {
-            margin-top: 30px;
-        }
+    <!-- PAGE TITLE -->
+    <h4 class="mb-4">Reports Dashboard</h4>
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+    <!-- STATS CARDS -->
+    <div class="row">
 
-        th, td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
+        <div class="col-12 col-md-3 mb-3">
+            <div class="card p-3 text-center">
+                <h3>{{ total_residents }}</h3>
+                <p>Total Residents</p>
+            </div>
+        </div>
 
-        th {
-            background: #333;
-            color: white;
-        }
-    </style>
-</head>
-<body>
+        <div class="col-12 col-md-3 mb-3">
+            <div class="card p-3 text-center">
+                <h3>{{ total_rooms }}</h3>
+                <p>Total Rooms</p>
+            </div>
+        </div>
 
-<h1>Reports Dashboard</h1>
+        <div class="col-12 col-md-3 mb-3">
+            <div class="card p-3 text-center">
+                <h3>{{ occupied_rooms }}</h3>
+                <p>Occupied Spaces</p>
+            </div>
+        </div>
 
-<div class="card">
-    <h2>{{ total_residents }}</h2>
-    <p>Total Residents</p>
+        <div class="col-12 col-md-3 mb-3">
+            <div class="card p-3 text-center">
+                <h3>{{ available_spaces }}</h3>
+                <p>Available Spaces</p>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-3 mb-3">
+            <div class="card p-3 text-center">
+                <h3>KES {{ total_payments }}</h3>
+                <p>Total Payments</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- DEBTORS TABLE -->
+    <div class="card mt-4">
+
+        <div class="card-header bg-dark text-white">
+            Residents with Balance
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for d in debtors %}
+                    <tr>
+                        <td>{{ d[0] }}</td>
+                        <td>KES {{ d[1] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div class="card">
-    <h2>{{ total_rooms }}</h2>
-    <p>Total Rooms</p>
-</div>
-
-<div class="card">
-    <h2>{{ occupied_rooms }}</h2>
-    <p>Occupied Spaces</p>
-</div>
-
-<div class="card">
-    <h2>{{ available_spaces }}</h2>
-    <p>Available Spaces</p>
-</div>
-
-<div class="card">
-    <h2>KES {{ total_payments }}</h2>
-    <p>Total Payments</p>
-</div>
-
-<div class="debtors">
-    <h2>Residents with Balance</h2>
-
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Balance</th>
-        </tr>
-
-        {% for d in debtors %}
-        <tr>
-            <td>{{ d[0] }}</td>
-            <td>KES {{ d[1] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-
-</body>
-</html>
+{% endblock %}
