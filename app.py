@@ -412,7 +412,7 @@ def change_admin_password():
         session.clear()
         return redirect('/')
 
-    return render_template('change_admin_password.html')
+    return render_template('change_admin_password.html', title="Change Admin Password")
 
 
 if __name__ == '__main__':
