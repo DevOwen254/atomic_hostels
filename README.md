@@ -184,12 +184,6 @@ The system can be deployed using:
 
 ---
 
-##  Screenshots
-
-*(Add system screenshots here for better presentation)*
-
----
-
 ## Author
 
 **Owen Munene**
