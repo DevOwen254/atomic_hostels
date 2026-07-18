@@ -124,7 +124,7 @@ atomic_hostel/
 ### 1. Clone the repository
 
 ```
-git clone <your-repo-link>
+git clone [<your-repo-link>](https://github.com/DevOwen254/atomic_hostels.git)
 cd atomic_hostel
 ```
 
